@@ -138,8 +138,8 @@ namespace EFCORE15.Pages
                 return;
             }
 
-            try
-            {
+            //try
+            //{
                 if (IsEdit)
                 {
                     service.Commit();
@@ -151,11 +151,11 @@ namespace EFCORE15.Pages
                 }
 
                 Back(sender, e);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Ошибка сохранения: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+            //}
+            //catch (Exception ex)
+            //{
+            //    MessageBox.Show($"Ошибка сохранения: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            //}
         }
 
         private void Back(object sender, RoutedEventArgs e)

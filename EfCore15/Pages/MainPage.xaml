@@ -113,7 +113,7 @@
                         </Binding>
                     </TextBox.Text>
                 </TextBox>
-                
+
                 <TextBlock Text="до" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="0,15,5,30"/>
                 <TextBox x:Name="priceToText" Grid.Row="2" Grid.Column="1" TextChanged="FilterPrice_TextChanged" MaxLength="20" Margin="0,15,0,30">
                     <TextBox.Text>

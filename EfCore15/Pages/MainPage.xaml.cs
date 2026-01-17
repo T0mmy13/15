@@ -47,6 +47,11 @@ namespace EFCORE15.Pages
         public int? SelectedCategoryId { get; set; }
         public int? SelectedBrandId { get; set; }
 
+        // Храним текущие направления сортировки
+        private ListSortDirection? _nameSortDirection;
+        private ListSortDirection? _priceSortDirection;
+        private ListSortDirection? _stockSortDirection;
+
         bool _manager = false;
         public MainPage(bool manager)
         {
@@ -159,6 +164,7 @@ namespace EFCORE15.Pages
 
             PriceComboBox.SelectedIndex = -1;
             StockComboBox.SelectedIndex = -1;
+            SortNameComboBox.SelectedIndex = -1;
             CategoriesComboBox.SelectedIndex = -1;
             BrandsComboBox.SelectedIndex = -1;
 
@@ -167,6 +173,11 @@ namespace EFCORE15.Pages
             filterPriceTo = null;
             SelectedCategoryId = null;
             SelectedBrandId = null;
+
+            // Сброс сортировок
+            _nameSortDirection = null;
+            _priceSortDirection = null;
+            _stockSortDirection = null;
 
             productsView.SortDescriptions.Clear();
             productsView.Refresh();
@@ -207,26 +218,40 @@ namespace EFCORE15.Pages
 
             var cb = sender as ComboBox;
             if (cb?.SelectedItem is not ComboBoxItem selected)
+            {
+                // Если ничего не выбрано, сбрасываем сортировку по цене
+                _priceSortDirection = null;
+                ApplyAllSortDescriptions();
                 return;
+            }
 
-            productsView.SortDescriptions.Clear();
+            var selectedSort = selected.Tag?.ToString();
 
-            switch (selected.Tag?.ToString())
+            // Определяем направление сортировки
+            ListSortDirection? newDirection = null;
+            switch (selectedSort)
             {
                 case "ascendingPrice":
-                    productsView.SortDescriptions.Add(
-                        new SortDescription("Price", ListSortDirection.Ascending));
+                    newDirection = ListSortDirection.Ascending;
                     break;
-
                 case "descendingPrice":
-                    productsView.SortDescriptions.Add(
-                        new SortDescription("Price", ListSortDirection.Descending));
+                    newDirection = ListSortDirection.Descending;
                     break;
             }
 
-            productsView.Refresh();
-        }
+            // Если выбрана та же сортировка (то же направление), сбрасываем ее
+            if (_priceSortDirection == newDirection)
+            {
+                _priceSortDirection = null;
+                cb.SelectedIndex = -1;
+            }
+            else
+            {
+                _priceSortDirection = newDirection;
+            }
 
+            ApplyAllSortDescriptions();
+        }
 
         private void Stock_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -235,75 +260,102 @@ namespace EFCORE15.Pages
 
             var cb = sender as ComboBox;
             if (cb?.SelectedItem is not ComboBoxItem selected)
+            {
+                // Если ничего не выбрано, сбрасываем сортировку по количеству
+                _stockSortDirection = null;
+                ApplyAllSortDescriptions();
                 return;
+            }
 
-            productsView.SortDescriptions.Clear();
+            var selectedSort = selected.Tag?.ToString();
 
-            switch (selected.Tag?.ToString())
+            // Определяем направление сортировки
+            ListSortDirection? newDirection = null;
+            switch (selectedSort)
             {
                 case "ascendingStock":
-                    productsView.SortDescriptions.Add(
-                        new SortDescription("Stock", ListSortDirection.Ascending));
+                    newDirection = ListSortDirection.Ascending;
                     break;
-
                 case "descendingStock":
-                    productsView.SortDescriptions.Add(
-                        new SortDescription("Stock", ListSortDirection.Descending));
+                    newDirection = ListSortDirection.Descending;
                     break;
             }
 
-            productsView.Refresh();
-        }
+            // Если выбрана та же сортировка (то же направление), сбрасываем ее
+            if (_stockSortDirection == newDirection)
+            {
+                _stockSortDirection = null;
+                cb.SelectedIndex = -1;
+            }
+            else
+            {
+                _stockSortDirection = newDirection;
+            }
 
+            ApplyAllSortDescriptions();
+        }
 
         private void SortName_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (productsView == null) return;
             var cb = sender as ComboBox;
-            if (cb?.SelectedItem is not ComboBoxItem selected) return;
+            if (cb?.SelectedItem is not ComboBoxItem selected)
+            {
+                // Если ничего не выбрано, сбрасываем сортировку по названию
+                _nameSortDirection = null;
+                ApplyAllSortDescriptions();
+                return;
+            }
 
-            productsView.SortDescriptions.Clear();
+            var selectedSort = selected.Tag?.ToString();
 
-            if (selected.Tag?.ToString() == "nameAZ")
-                productsView.SortDescriptions.Add(new SortDescription("Name", ListSortDirection.Ascending));
-            else if (selected.Tag?.ToString() == "nameZA")
-                productsView.SortDescriptions.Add(new SortDescription("Name", ListSortDirection.Descending));
+            // Определяем направление сортировки
+            ListSortDirection? newDirection = null;
+            switch (selectedSort)
+            {
+                case "nameAZ":
+                    newDirection = ListSortDirection.Ascending;
+                    break;
+                case "nameZA":
+                    newDirection = ListSortDirection.Descending;
+                    break;
+            }
 
-            productsView.Refresh();
+            // Если выбрана та же сортировка (то же направление), сбрасываем ее
+            if (_nameSortDirection == newDirection)
+            {
+                _nameSortDirection = null;
+                cb.SelectedIndex = -1;
+            }
+            else
+            {
+                _nameSortDirection = newDirection;
+            }
+
+            ApplyAllSortDescriptions();
         }
 
-        private void SortComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void ApplyAllSortDescriptions()
         {
-            if (productsView == null)
-                return;
-
-            var cb = sender as ComboBox;
-            if (cb?.SelectedItem is not ComboBoxItem selected)
-                return;
-
             productsView.SortDescriptions.Clear();
 
-            switch (selected.Tag?.ToString())
+            // Применяем сортировки в порядке приоритета: 1) Название, 2) Цена, 3) Количество
+            if (_nameSortDirection.HasValue)
             {
-                case "categoriesAZ":
-                    productsView.SortDescriptions.Add(
-                        new SortDescription("Category.Name", ListSortDirection.Ascending));
-                    break;
+                productsView.SortDescriptions.Add(
+                    new SortDescription("Name", _nameSortDirection.Value));
+            }
 
-                case "categoriesZA":
-                    productsView.SortDescriptions.Add(
-                        new SortDescription("Category.Name", ListSortDirection.Descending));
-                    break;
+            if (_priceSortDirection.HasValue)
+            {
+                productsView.SortDescriptions.Add(
+                    new SortDescription("Price", _priceSortDirection.Value));
+            }
 
-                case "brandsAZ":
-                    productsView.SortDescriptions.Add(
-                        new SortDescription("Brand.Name", ListSortDirection.Ascending));
-                    break;
-
-                case "brandsZA":
-                    productsView.SortDescriptions.Add(
-                        new SortDescription("Brand.Name", ListSortDirection.Descending));
-                    break;
+            if (_stockSortDirection.HasValue)
+            {
+                productsView.SortDescriptions.Add(
+                    new SortDescription("Stock", _stockSortDirection.Value));
             }
 
             productsView.Refresh();
