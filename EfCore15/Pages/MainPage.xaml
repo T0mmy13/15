@@ -104,7 +104,7 @@
 
                 <Label Grid.Row="0" Content="Цена" Grid.ColumnSpan="2" HorizontalAlignment="Center"/>
                 <TextBlock Text="от" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"/>
-                <TextBox x:Name="priceFromText" Grid.Row="1" Grid.Column="1" TextChanged="FilterPrice_TextChanged">
+                <TextBox x:Name="priceFromText" Grid.Row="1" Grid.Column="1" TextChanged="FilterPrice_TextChanged" MaxLength="20">
                     <TextBox.Text>
                         <Binding Path="filterPriceFrom" UpdateSourceTrigger="PropertyChanged">
                             <Binding.ValidationRules>
@@ -115,7 +115,7 @@
                 </TextBox>
 
                 <TextBlock Text="до" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,5,0"/>
-                <TextBox x:Name="priceToText" Grid.Row="2" Grid.Column="1" TextChanged="FilterPrice_TextChanged">
+                <TextBox x:Name="priceToText" Grid.Row="2" Grid.Column="1" TextChanged="FilterPrice_TextChanged" MaxLength="20">
                     <TextBox.Text>
                         <Binding Path="filterPriceTo" UpdateSourceTrigger="PropertyChanged">
                             <Binding.ValidationRules>

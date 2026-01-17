@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="MainWindow" x:Name="mwTitle"
         MinHeight="800" MinWidth="800"
-        Height="800" Width="1000"
+        Height="1000" Width="1200"
         Background="{StaticResource MaterialDesign.Brush.Background}"
         WindowStartupLocation="CenterScreen">
     <Grid>
