@@ -30,7 +30,7 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
 
-        <TextBox x:Name="searchText"  
+        <TextBox x:Name="searchText" MaxLength="50"  
           Text="{Binding searchQuery, UpdateSourceTrigger=PropertyChanged}"
           TextChanged="Search_TextChanged"
                          Grid.ColumnSpan="2"
@@ -113,9 +113,9 @@
                         </Binding>
                     </TextBox.Text>
                 </TextBox>
-
-                <TextBlock Text="до" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,5,0"/>
-                <TextBox x:Name="priceToText" Grid.Row="2" Grid.Column="1" TextChanged="FilterPrice_TextChanged" MaxLength="20">
+                
+                <TextBlock Text="до" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="0,15,5,30"/>
+                <TextBox x:Name="priceToText" Grid.Row="2" Grid.Column="1" TextChanged="FilterPrice_TextChanged" MaxLength="20" Margin="0,15,0,30">
                     <TextBox.Text>
                         <Binding Path="filterPriceTo" UpdateSourceTrigger="PropertyChanged">
                             <Binding.ValidationRules>
