@@ -1,13 +1,13 @@
 USE [master]
 GO
 
-/****** Object:  Database [ElectronicsStoreDB]    Script Date: 17.01.2026 9:01:00 ******/
+/****** Object:  Database [ElectronicsStoreDB]    Script Date: 17.01.2026 10:25:54 ******/
 CREATE DATABASE [ElectronicsStoreDB]
  CONTAINMENT = NONE
  ON  PRIMARY 
-( NAME = N'ElectronicsStore', FILENAME = N'E:\Microsoft SQL Server\MSSQL16.SQLEXPRESS\MSSQL\DATA\ElectronicsStore.mdf' , SIZE = 8192KB , MAXSIZE = UNLIMITED, FILEGROWTH = 65536KB )
+( NAME = N'ElectronicsStoreDB', FILENAME = N'E:\Microsoft SQL Server\MSSQL16.SQLEXPRESS\MSSQL\DATA\ElectronicsStoreDB.mdf' , SIZE = 8192KB , MAXSIZE = UNLIMITED, FILEGROWTH = 65536KB )
  LOG ON 
-( NAME = N'ElectronicsStore_log', FILENAME = N'E:\Microsoft SQL Server\MSSQL16.SQLEXPRESS\MSSQL\DATA\ElectronicsStore_log.ldf' , SIZE = 8192KB , MAXSIZE = 2048GB , FILEGROWTH = 65536KB )
+( NAME = N'ElectronicsStoreDB_log', FILENAME = N'E:\Microsoft SQL Server\MSSQL16.SQLEXPRESS\MSSQL\DATA\ElectronicsStoreDB_log.ldf' , SIZE = 8192KB , MAXSIZE = 2048GB , FILEGROWTH = 65536KB )
  WITH CATALOG_COLLATION = DATABASE_DEFAULT, LEDGER = OFF
 GO
 
@@ -115,4 +115,5 @@ GO
 
 ALTER DATABASE [ElectronicsStoreDB] SET  READ_WRITE 
 GO
+
 
