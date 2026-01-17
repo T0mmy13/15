@@ -105,13 +105,30 @@ namespace EFCORE15.Pages
             if (SelectedBrandId.HasValue && SelectedBrandId > 0 && product.BrandId != SelectedBrandId.Value)
                 return false;
 
-            if (!filterPriceFrom.IsNullOrEmpty() && Convert.ToDecimal(filterPriceFrom) > product.Price)
-                return false;
-
-            if (!filterPriceTo.IsNullOrEmpty() && Convert.ToDecimal(filterPriceTo) < product.Price)
-                return false;
-
-
+            if (!string.IsNullOrEmpty(filterPriceFrom))
+            {
+                if (decimal.TryParse(filterPriceFrom, out decimal minPrice))
+                {
+                    if (minPrice > product.Price)
+                        return false;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            if (!string.IsNullOrEmpty(filterPriceTo))
+            {
+                if (decimal.TryParse(filterPriceTo, out decimal maxPrice))
+                {
+                    if (maxPrice < product.Price)
+                        return false;
+                }
+                else
+                {
+                    return false;
+                }
+            }
 
             return true;
         }
