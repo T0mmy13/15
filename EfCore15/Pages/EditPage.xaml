@@ -1,0 +1,155 @@
+﻿<Page x:Class="EFCORE15.Pages.EditPage"
+          xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+          xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+          xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+          xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+          xmlns:local="clr-namespace:EFCORE15.Pages"
+          xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+          xmlns:validator="clr-namespace:EFCORE15.Validators"
+          mc:Ignorable="d" 
+          d:DesignHeight="600" d:DesignWidth="900"
+          Background="{DynamicResource MaterialDesignPaper}"
+          Loaded="LoadList">
+
+    <Page.Resources>
+        <validator:NameValidator x:Key="nameValidator"/>
+        <validator:PriceValidator x:Key="priceValidator"/>
+        <validator:StockValidator x:Key="stockValidator"/>
+        <validator:RatingValidator x:Key="ratingValidator"/>
+        <validator:DescriptionValidator x:Key="descriptionValidator"/>
+    </Page.Resources>
+
+    <Grid Margin="30">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="Редактирование товара" Style="{StaticResource MaterialDesignHeadline5TextBlock}" Margin="0,0,0,20"/>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="30"/>
+                <ColumnDefinition Width="2*"/>
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.Column="0">
+                <TextBox x:Name="Name" Style="{StaticResource MaterialDesignOutlinedTextBox}" materialDesign:HintAssist.Hint="Название товара" Margin="0,0,0,15">
+                    <TextBox.Text>
+                        <Binding Path="Product.Name" UpdateSourceTrigger="PropertyChanged">
+                            <Binding.ValidationRules>
+                                <validator:NameValidator/>
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox.Text>
+                </TextBox>
+
+                <Grid Margin="0,0,0,15">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="10"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <ComboBox x:Name="CategoryComboBox" Grid.Column="0" Style="{StaticResource MaterialDesignOutlinedComboBox}" materialDesign:HintAssist.Hint="Категория"
+                                  ItemsSource="{Binding Categories}" DisplayMemberPath="Name" SelectedValuePath="Id"
+                                  SelectedValue="{Binding Product.CategoryId, UpdateSourceTrigger=PropertyChanged}"/>
+
+                    <ComboBox x:Name="BrandComboBox" Grid.Column="2" Style="{StaticResource MaterialDesignOutlinedComboBox}" materialDesign:HintAssist.Hint="Бренд"
+                                  ItemsSource="{Binding Brands}" DisplayMemberPath="Name" SelectedValuePath="Id"
+                                  SelectedValue="{Binding Product.BrandId, UpdateSourceTrigger=PropertyChanged}"/>
+                </Grid>
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="10"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="10"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBox x:Name="Price" Grid.Column="0" Style="{StaticResource MaterialDesignOutlinedTextBox}" materialDesign:HintAssist.Hint="Цена">
+                        <TextBox.Text>
+                            <Binding Path="Product.Price" UpdateSourceTrigger="PropertyChanged" StringFormat="F1">
+                                <Binding.ValidationRules>
+                                    <validator:PriceValidator/>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>
+
+                    <TextBox x:Name="Stock" Grid.Column="2" Style="{StaticResource MaterialDesignOutlinedTextBox}" materialDesign:HintAssist.Hint="Кол-во">
+                        <TextBox.Text>
+                            <Binding Path="Product.Stock" UpdateSourceTrigger="PropertyChanged">
+                                <Binding.ValidationRules>
+                                    <validator:StockValidator/>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>
+
+                    <TextBox x:Name="Rating" Grid.Column="4" Style="{StaticResource MaterialDesignOutlinedTextBox}" materialDesign:HintAssist.Hint="Рейтинг">
+                        <TextBox.Text>
+                            <Binding Path="Product.Rating" UpdateSourceTrigger="PropertyChanged" StringFormat="F1">
+                                <Binding.ValidationRules>
+                                    <validator:RatingValidator/>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>
+                </Grid>
+            </StackPanel>
+
+            <StackPanel Grid.Column="2">
+                <TextBox x:Name="Description" Style="{StaticResource MaterialDesignOutlinedTextBox}" materialDesign:HintAssist.Hint="Описание"
+                             Height="100" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" Margin="0,0,0,15">
+                    <TextBox.Text>
+                        <Binding Path="Product.Description" UpdateSourceTrigger="PropertyChanged">
+                            <Binding.ValidationRules>
+                                <validator:DescriptionValidator/>
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox.Text>
+                </TextBox>
+
+                <TextBlock Text="Теги" FontWeight="Bold" Margin="0,0,0,5"/>
+
+                <Grid Height="200">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <GroupBox Header="Доступные" Grid.Column="0" Padding="0">
+                        <ListBox ItemsSource="{Binding Tags}" 
+                                     SelectedItem="{Binding SelectedTag}" 
+                                     DisplayMemberPath="Name" 
+                                     ScrollViewer.VerticalScrollBarVisibility="Auto"/>
+                    </GroupBox>
+
+                    <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="5">
+                        <Button Content=">" Click="AddTag" ToolTip="Добавить тег" Margin="0,0,0,10" Width="40" Padding="0"/>
+                        <Button Content="влево" Click="RemoveTag" ToolTip="Убрать тег" Width="40" />
+                    </StackPanel>
+
+                    <GroupBox Header="Выбранные" Grid.Column="2" Padding="0">
+                        <ListBox ItemsSource="{Binding ProductTags}" 
+                                     SelectedItem="{Binding SelectedProductTag}" 
+                                     DisplayMemberPath="Name" 
+                                     ScrollViewer.VerticalScrollBarVisibility="Auto"/>
+                    </GroupBox>
+                </Grid>
+            </StackPanel>
+        </Grid>
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0">
+            <Button Click="Delete" HorizontalAlignment="Left" Content="Удалить" Style="{StaticResource MaterialDesignOutlinedButton}" Foreground="Red" BorderBrush="Red" Padding="10,5"/>
+            <Button Click="Back" Content="Отмена" Style="{StaticResource MaterialDesignFlatButton}" Margin="0,0,10,0"/>
+            <Button Click="Edit" Content="Сохранить изменения" Width="180"/>
+        </StackPanel>
+    </Grid>
+</Page>
